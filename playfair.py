@@ -49,8 +49,27 @@ def chiffrement(M, Mx):
 
 
 def dechiffrement(C, Mx):
-    chiffrement(C, Mx)
-
+    cleartext = ""
+    for i in range(0, len(C) - 1, 2):
+        letter1, letter2 = C[i], C[i + 1]
+        row1, col1 = find_letter_position(Mx, letter1)
+        row2, col2 = find_letter_position(Mx, letter2)
+        if row1 == row2:
+            if Mx[row1][col1 % 5] == Mx[row2][(col2 - 1) % 5]:
+                cleartext += Mx[row1][(col1 - 1) % 5] + Mx[row2][(col2 - 2) % 5]
+            elif Mx[row1][col1 % 5] == Mx[row2][(col2 + 1) % 5]:
+                cleartext += Mx[row1][(col1 - 2) % 5] + Mx[row2][(col2 - 2) % 5]
+            cleartext += Mx[row1][(col1 - 1) % 5] + Mx[row2][(col2 - 1) % 5]
+        elif col1 == col2:
+            if Mx[row1 % 5][col1] == Mx[(row2 + 1) % 5][col2]:
+                cleartext += Mx[(row1 - 2) % 5][col1] + Mx[(row2 - 2) % 5][col2]
+            elif Mx[row1 % 5][col1] == Mx[(row2 - 1) % 5][col2]:
+                cleartext += Mx[(row1 - 1) % 5][col1] + Mx[(row2 - 2) % 5][col2]
+            cleartext += Mx[(row1 - 1) % 5][col1] + Mx[(row2 - 1) % 5][col2]
+        else:
+            cleartext += Mx[row1][col2] + Mx[row2][col1]
+    print(cleartext)
+    return cleartext
 
 key = str(input("enter key : "))
 M = str(input("enter message :"))
